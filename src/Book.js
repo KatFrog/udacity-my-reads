@@ -3,19 +3,19 @@ import PropTypes from 'prop-types'
 
 class Book extends Component {
     static propTypes = {
-        books: PropTypes.array.isRequired,
         book: PropTypes.object.isRequired,
         onChangeBookshelf: PropTypes.func.isRequired
     }
 
     render() {
-        const { books, book, onChangeBookshelf } = this.props
+        const { book, onChangeBookshelf } = this.props
         return (
             <div className="book">
                 <div className="book-top">
-                    <img className="book-cover" alt="Book cover" src={book.backgroundImage} width={book.imageWidth} height={book.imageHeight} />
+                    <img className="book-cover" alt="Book cover" src={book.backgroundImage}
+                     />
                     <div className="book-shelf-changer">
-                        <select id="bookshelf-select" name="bookshelf-select" onChange={onChangeBookshelf.bind(this, books, book.id)}>
+                        <select id="bookshelf-select" name="bookshelf-select" onChange={onChangeBookshelf.bind(this, book)}>
                             <option value="move">Move to...</option>
                             <option value="Currently Reading">Currently Reading</option>
                             <option value="Want To Read">Want To Read</option>
