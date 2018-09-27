@@ -17,9 +17,9 @@ class Book extends Component {
                     <div className="book-shelf-changer">
                         <select id="bookshelf-select" name="bookshelf-select" onChange={onChangeBookshelf.bind(this, book)}>
                             <option value="move">Move to...</option>
-                            <option value="Currently Reading">Currently Reading</option>
-                            <option value="Want To Read">Want To Read</option>
-                            <option value="Read">Read</option>
+                            <option value="currentlyReading">Currently Reading</option>
+                            <option value="wantToRead">Want To Read</option>
+                            <option value="read">Read</option>
                         </select>
                     </div>
                 </div>

@@ -3,10 +3,9 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import Bookshelf from './Bookshelf'
 
-
 class ListBooks extends Component {
     static propTypes = {
-        bookshelves: PropTypes.arrayOf(PropTypes.string).isRequired,
+        bookshelves: PropTypes.arrayOf(PropTypes.object).isRequired,
         books: PropTypes.arrayOf(PropTypes.object).isRequired,
         onChangeBookshelf: PropTypes.func.isRequired
     }
@@ -20,11 +19,11 @@ class ListBooks extends Component {
                 </div>
                 <div className="list-books-content">
                     {bookshelves.map((bookshelf) => {
-                        filteredBooks = books.filter((book) => book.bookshelf === bookshelf)
+                        filteredBooks = books.filter((book) => book.bookshelf === bookshelf.internalName)
                         return (
                             <Bookshelf
-                                key={bookshelf}
-                                bookshelf={bookshelf}
+                                key={bookshelf.internalName}
+                                bookshelf={bookshelf.title}
                                 currentBooks={filteredBooks}
                                 onChangeBookshelf={onChangeBookshelf}
                             />
