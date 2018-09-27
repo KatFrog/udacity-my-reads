@@ -21,7 +21,7 @@ class SearchBooks extends Component {
             this.setState({
                 query: newQuery,
                 foundBooks: [],
-                resultsFound: false})
+                resultsFound: true})
             return
         }
 
@@ -34,34 +34,11 @@ class SearchBooks extends Component {
                 } else {
                     this.setState({resultsFound: true})
                     let tempBooks = value.map((book) => {
-                        let newBook = {
-                            id: '',
-                            title: '',
-                            isbn: '',
-                            author: [],
-                            backgroundImage: '',
-                            bookshelf: ''
-                        }
-                        newBook.id = book.id
-                        newBook.title = book.title
-                        if (book.industryIdentifiers[0].identifier) {
-                            newBook.isbn = book.industryIdentifiers[0].identifier
-                        }
-                        if (book.authors) {
-                            newBook.author = book.authors.slice(0)
-                        } else {
-                            newBook.author = "Unknown"
-                        }
-                        if (book.imageLinks) {
-                            newBook.backgroundImage = book.imageLinks.thumbnail
-                        } else {
-                            newBook.backgroundImage = 'icons/cover-not-found.jpg'
-                        }
-                        return (newBook)
+                        let nextBook = this.props.onFormatBook(book)
+                        return (nextBook)
                     })
                     this.setState({foundBooks: tempBooks})
                 }
-
             }) //end of BooksAPI search then
             .catch ((err)  => {
                 console.log(err)
