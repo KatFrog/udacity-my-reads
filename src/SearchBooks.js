@@ -1,35 +1,76 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
-import Book from './Book'
-import ListBooks from './ListBooks'
+import Bookshelf from './Bookshelf'
 import escapeStringRegExp from 'escape-string-regexp'
 
 
 class SearchBooks extends Component {
 
     state = {
-        query: ''
+        query: '',
+        foundBooks: [],
+        resultsFound: true,
     }
 
-    updateQuery = (newQuery) => {
-        this.setState({ query: newQuery })
-    }
+    submitQuery = (foundBooks, newQuery) => {
+        if (newQuery) {
+            this.setState({ query: newQuery })
 
-    clearQuery = () => {
-        this.setState({ query: '' })
-    }
+        } else {
+            this.setState({
+                query: newQuery,
+                foundBooks: [],
+                resultsFound: false})
+            return
+        }
 
-    submitQuery = (foundBooks, query) => {
-        const match = escapeStringRegExp(query)
-        BooksAPI.search(query).then((value) =>
-            console.log(value)
-        )
-    }
+        const match = escapeStringRegExp(newQuery)
+
+        BooksAPI.search(match)
+            .then((value) => {
+                if (value.error) {
+                    this.setState({resultsFound: false})
+                } else {
+                    this.setState({resultsFound: true})
+                    let tempBooks = value.map((book) => {
+                        let newBook = {
+                            id: '',
+                            title: '',
+                            isbn: '',
+                            author: [],
+                            backgroundImage: '',
+                            bookshelf: ''
+                        }
+                        newBook.id = book.id
+                        newBook.title = book.title
+                        if (book.industryIdentifiers[0].identifier) {
+                            newBook.isbn = book.industryIdentifiers[0].identifier
+                        }
+                        if (book.authors) {
+                            newBook.author = book.authors.slice(0)
+                        } else {
+                            newBook.author = "Unknown"
+                        }
+                        if (book.imageLinks) {
+                            newBook.backgroundImage = book.imageLinks.thumbnail
+                        } else {
+                            newBook.backgroundImage = 'icons/cover-not-found.jpg'
+                        }
+                        return (newBook)
+                    })
+                    this.setState({foundBooks: tempBooks})
+                }
+
+            }) //end of BooksAPI search then
+            .catch ((err)  => {
+                console.log(err)
+            })
+
+    } // end of submitQuery method
 
     render () {
-        const { query } = this.state
-        let foundBooks = []
+        const { query, foundBooks, resultsFound } = this.state
 
         return (
             <div className="search-books">
@@ -42,15 +83,21 @@ class SearchBooks extends Component {
                         className="close-search"
                     >Close</Link>
                     <div className="search-books-input-wrapper">
-
-                      <input
-                        type="text"
-                        placeholder="Search by title or author"
-                        value={query}
-                        onChange={(evt) => this.updateQuery(evt.target.value)}
+                        <input
+                            type="text"
+                            placeholder="Search for books"
+                            value={query}
+                            onChange={(evt) => this.submitQuery(foundBooks, evt.target.value)}
                         />
-                        <button type="submit" className='search-submit' onClick={() => this.submitQuery(foundBooks, query)}>Submit</button>
                     </div>
+                </div>
+                <div className="search-books-results" id="search-results">
+                    {!resultsFound && <p>No search results have been found.</p>}
+                    <Bookshelf
+                        bookshelf="Search Results"
+                        currentBooks={foundBooks}
+                        onChangeBookshelf = {this.props.onChangeBookshelf}
+                    />
                 </div>
             </div>
 
@@ -59,17 +106,3 @@ class SearchBooks extends Component {
 }
 
 export default SearchBooks
-
-// <div className="search-books-results">
-//     <ol className="books-grid">
-//         {foundBooks.map((book) => {
-//             return (<li key={book.id} id={book.id}>
-//                 <Book
-//                     books={books}
-//                     book={book}
-//                     onChangeBookshelf={this.props.onChangeBookshelf}
-//                 />
-//             </li>)
-//         })}
-//     </ol>
-// </div>
