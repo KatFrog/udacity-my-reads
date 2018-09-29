@@ -50,7 +50,7 @@ class BookStore extends Component {
         if (book.shelf) {
             newBook.bookshelf = book.shelf
         } else {
-            newBook.bookshelf = "wantToRead"
+            newBook.bookshelf = "none"
         }
         return(newBook)
     }
@@ -71,51 +71,23 @@ class BookStore extends Component {
         })
     }
 
-    changeBookshelf = (changedBook, evt) => {
-        evt.persist();
-        this.setState(function(prevState) {
-            let changed = prevState.books.filter(next => next['id'] === changedBook.id)
-            BooksAPI.update(changedBook.id, evt.target.value)
-                return {
-                    prevState: changed[0]['bookshelf'] = evt.target.value
-                }
-            }
-        )
-
-    }
-
-    addBook = (book, evt) => {
-        evt.persist();
-        book.bookshelf = evt.target.value
-        BooksAPI.update(book, evt.target.value).then((value) => {
-            console.log('success')
-        }).catch((err) => {
-            console.log("update failed")
-        })
-        this.setState(function(prevState) {
-            return ( {
-                books: prevState.books.concat([ book ])
-            })
-        })
-    }
-
     render() {
         this.getBooks()
+        const { books, bookshelf } = this.state
         return (
             <div className="app">
                 <Route exact path="/"
                     render={ () => (
                         <ListBooks
-                            books={this.state.books}
-                            bookshelves={this.state.bookshelf}
-                            onChangeBookshelf={this.changeBookshelf}
+                            books={books}
+                            bookshelves={bookshelf}
                         />
                     )}
                 />
                 <Route path="/search"
                     render={ () => (
                         <SearchBooks
-                            onChangeBookshelf={this.addBook}
+                            savedBooks={books}
                             onFormatBook={this.formatBookInfo}
                         />
                     )}
