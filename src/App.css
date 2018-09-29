@@ -138,13 +138,17 @@ body, .app {
 .book {
   width: 140px;
 }
+
 .book-title,
 .book-authors {
   font-size: 0.8em;
 }
+
 .book-title {
-  margin-top: 10px;
+    font-weight: bold;
+    margin-top: 10px;
 }
+
 .book-authors {
   color: #999;
 }
@@ -157,21 +161,21 @@ body, .app {
 }
 
 .book-shelf-changer {
-  position: absolute;
-  right: 0;
-  bottom: -10px;
-  width: 40px;
+  /* position: absolute; */
+  /* right: 0;
+  bottom: -10px; */
+  width: 150px;
   height: 40px;
-  border-radius: 50%;
+  /*border-radius: 50%;
   background: #60ac5d;
   background-image: url('./icons/arrow-drop-down.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 20px;
+  background-size: 20px; */
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
-.book-shelf-changer select {
-  width: 100%;
+.book-shelf-changer-select {
+  width: 50px;
   height: 100%;
   opacity: 0;
   cursor: pointer;
