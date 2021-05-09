@@ -28,11 +28,9 @@ My Reads allows you to search for books using specific search terms (found in SE
  
  The backend is provided by and run by Udacity.
 
-## To Use My Reads
+## Steps
 
 To use this application you need to:
 
-1. Download or clone this repository.
-2. Change directories into the downloaded/cloned code.
-3. Run the command "npm install".
-4. Run the command "npm start".
+1. Run the command "npm install".
+2. Run the command "npm start".
